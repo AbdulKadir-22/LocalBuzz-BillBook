@@ -1,21 +1,28 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axios";
-import "../styles/AddProduct.css"; // We will create this CSS file next
+import "../styles/AddProduct.css";
 
+/**
+ * A form for adding a new product to the store.
+ */
 const AddProduct = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     quantity: "",
-    imageUrl: "", // Field for the image URL
+    imageUrl: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  /**
+   * Updates form data state on user input.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -24,13 +31,16 @@ const AddProduct = () => {
     }));
   };
 
+  /**
+   * Handles form submission to create a new product.
+   * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     setSuccess("");
 
-    // Simple validation
     if (!formData.name || !formData.price || !formData.quantity) {
       setError("Please fill in all required fields.");
       setLoading(false);
@@ -41,9 +51,8 @@ const AddProduct = () => {
       await axiosInstance.post("/products", formData);
       setSuccess("Product added successfully! Redirecting...");
       
-      // Clear form and redirect after a short delay
       setTimeout(() => {
-        navigate("/landing"); // Navigate back to the main products/cart page
+        navigate("/cart"); // Navigate back to the main product list
       }, 2000);
 
     } catch (err) {
@@ -55,17 +64,17 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="add-product-container">
-      <form className="add-product-form" onSubmit={handleSubmit}>
+    <div className="form-page-container">
+      <form className="form-card" onSubmit={handleSubmit} noValidate>
         <div className="form-header">
           <h2>Add New Product</h2>
-          <button type="button" className="back-btn" onClick={() => navigate("/landing")}>
+          <button type="button" className="secondary-btn" onClick={() => navigate("/cart")}>
             &larr; Back to Cart
           </button>
         </div>
 
-        {error && <p className="message error-message">{error}</p>}
-        {success && <p className="message success-message">{success}</p>}
+        {error && <div className="form-message error">{error}</div>}
+        {success && <div className="form-message success">{success}</div>}
 
         <div className="form-group">
           <label htmlFor="name">Product Name</label>
@@ -82,7 +91,7 @@ const AddProduct = () => {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="price">Price ($)</label>
+            <label htmlFor="price">Price (₹)</label>
             <input
               type="number"
               id="price"
@@ -111,7 +120,7 @@ const AddProduct = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="imageUrl">Image URL</label>
+          <label htmlFor="imageUrl">Image URL (Optional)</label>
           <input
             type="text"
             id="imageUrl"
@@ -122,16 +131,21 @@ const AddProduct = () => {
           />
         </div>
 
-        {/* Live Image Preview */}
         {formData.imageUrl && (
-          <div className="image-preview-box">
+          <div className="form-group">
             <label>Image Preview</label>
-            <img src={formData.imageUrl} alt="Product Preview" className="image-preview" />
+            <img 
+              src={formData.imageUrl} 
+              alt="Product Preview" 
+              className="image-preview"
+              onError={(e) => e.target.style.display = 'none'} // Hide if image URL is broken
+              onLoad={(e) => e.target.style.display = 'block'} // Show if image loads
+            />
           </div>
         )}
 
-        <button type="submit" className="submit-btn" disabled={loading}>
-          {loading ? "Adding..." : "Add Product"}
+        <button type="submit" className="primary-btn" disabled={loading}>
+          {loading ? "Adding Product..." : "Add Product"}
         </button>
       </form>
     </div>

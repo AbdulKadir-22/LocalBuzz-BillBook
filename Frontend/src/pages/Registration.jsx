@@ -15,10 +15,18 @@ const Registration = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  /**
+   * Updates form data state on user input.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
+   */
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Handles form submission for user registration.
+   * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -30,91 +38,87 @@ const Registration = () => {
     }
 
     setLoading(true);
-
     try {
-      // ✨ FIX: Using the correct API endpoint to match the backend route
       const res = await axiosInstance.post("/user/signup", formData);
       setSuccess(res.data.message || "Account created successfully!");
-      
-      // Redirect to login page after a short delay
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      setError(err.response?.data?.error || "Registration failed. Please try again.");
+      setError(
+        err.response?.data?.error || "Registration failed. Please try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="registration-container">
-      <div className="registration-card">
-        {/* Left Image Section */}
-        <div className="registration-image-section">
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-visual-section">
           <img
             src="https://i.pinimg.com/736x/c4/a3/1e/c4a31e950b3dc16250f7c56519515e80.jpg"
             alt="Modern storefront"
           />
         </div>
-
-        {/* Right Form Section */}
-        <div className="registration-form-section">
-          <h2>Create Your Account</h2>
-          <p className="sub-text">Set up your store in just a few minutes.</p>
-
-          <div className="login-link">
-            Already have an account? <NavLink to="/login">Log In</NavLink>
+        <div className="auth-form-section">
+          <div className="auth-header">
+            <h2>Create Your Account</h2>
+            <p>Set up your store in just a few minutes.</p>
           </div>
-          
-          {error && <p className="message-container error-message">{error}</p>}
-          {success && <p className="message-container success-message">{success}</p>}
+
+          {error && <div className="auth-message error">{error}</div>}
+          {success && <div className="auth-message success">{success}</div>}
 
           <form onSubmit={handleSubmit} noValidate>
-            <div className="form-input-wrapper">
+            <div className="input-group">
               <label htmlFor="shopName">Shop Name</label>
               <input
                 type="text"
                 id="shopName"
                 name="shopName"
-                placeholder="e.g., 5 Star Bakery"
-                className="form-input"
+                placeholder="e.g., The Corner Store"
                 value={formData.shopName}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <div className="form-input-wrapper">
-              <label htmlFor="email">Email</label>
+            <div className="input-group">
+              <label htmlFor="email">Email Address</label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="you@example.com"
-                className="form-input"
                 value={formData.email}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <div className="form-input-wrapper">
+            <div className="input-group">
               <label htmlFor="password">Password</label>
               <input
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Create a strong password"
-                className="form-input"
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <button type="submit" className="register-btn" disabled={loading}>
+            <button type="submit" className="auth-button" disabled={loading}>
               {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
+
+          <div className="auth-footer">
+            <p>
+              Already have an account? <NavLink to="/login">Log In</NavLink>
+            </p>
+          </div>
         </div>
       </div>
     </div>

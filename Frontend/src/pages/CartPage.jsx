@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axios';
 import '../styles/CartPage.css';
-import axiosInstance from '../api/axios'; 
 
-// ProductCard component can remain the same
+/**
+ * A reusable card component to display a single product.
+ */
 const ProductCard = ({ product, quantity, isSelected, onQuantityChange, onSelectionChange }) => {
   const id = product._id;
   const price = product.price || 0;
@@ -19,29 +21,31 @@ const ProductCard = ({ product, quantity, isSelected, onQuantityChange, onSelect
       <p>{product.name}</p>
       <div className="controls">
         <button onClick={() => onQuantityChange(id, quantity - 1)}>-</button>
-        <span>${price.toFixed(2)} • {quantity}</span>
+        <span>₹{price.toFixed(2)} • {quantity}</span>
         <button onClick={() => onQuantityChange(id, quantity + 1)}>+</button>
       </div>
     </div>
   );
 };
 
-function CartPage() {
+/**
+ * Main page for displaying products and creating an invoice.
+ */
+const CartPage = () => {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]); 
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState({});
   const [selectedProducts, setSelectedProducts] = useState(new Set());
-
-  // ✨ REFINEMENT 1: Add loading and error states for better UX
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // ✨ REFINEMENT 2: Get user info from localStorage to make the component dynamic
+  // Memoize user info to avoid re-parsing on every render.
   const userInfo = useMemo(() => {
     const info = localStorage.getItem('userInfo');
     return info ? JSON.parse(info) : null;
   }, []);
 
+  // Fetch all products on component mount.
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -59,20 +63,26 @@ function CartPage() {
     fetchProducts();
   }, []);
 
+  /**
+   * Updates the quantity for a specific product in the cart.
+   */
   const handleQuantityChange = (productId, newQuantity) => {
-    if (newQuantity < 0) return; // Prevent negative quantity
+    if (newQuantity < 0) return;
     setCart(prevCart => ({
       ...prevCart,
       [productId]: newQuantity,
     }));
   };
 
+  /**
+   * Toggles the selection state of a product.
+   */
   const handleSelectionChange = (productId, isChecked) => {
     setSelectedProducts(prevSelected => {
       const newSelected = new Set(prevSelected);
       if (isChecked) {
         newSelected.add(productId);
-        // If product is selected and quantity is 0, set it to 1
+        // Add to cart with quantity 1 if not already present
         if (!cart[productId]) {
           handleQuantityChange(productId, 1);
         }
@@ -83,25 +93,30 @@ function CartPage() {
     });
   };
 
+  // Memoize cart calculations for performance.
   const { totalItems, billAmount } = useMemo(() => {
     let items = 0;
     let amount = 0;
     selectedProducts.forEach(productId => {
       const product = products.find(p => p._id === productId); 
-      if (product && cart[productId] > 0) {
-        items += cart[productId];
-        amount += product.price * cart[productId];
+      const quantity = cart[productId];
+      if (product && quantity > 0) {
+        items += quantity;
+        amount += product.price * quantity;
       }
     });
     return { totalItems: items, billAmount: amount };
   }, [cart, selectedProducts, products]);
 
+  /**
+   * Prepares and navigates to the invoice generation page.
+   */
   const handleGenerateInvoice = async () => {
     const invoiceItems = Array.from(selectedProducts)
       .map(productId => {
         const product = products.find(p => p._id === productId);
         const quantity = cart[productId];
-        if (!product || !quantity || quantity === 0) return null;
+        if (!product || !quantity || quantity <= 0) return null;
         return {
           productId: productId,
           name: product.name,
@@ -109,68 +124,68 @@ function CartPage() {
           quantity: quantity,
         };
       })
-      .filter(Boolean); // Remove any null items
+      .filter(Boolean);
 
     if (invoiceItems.length === 0) {
-        setError("Please select items with a quantity greater than zero.");
+        setError("Please select one or more items to generate an invoice.");
         return;
     }
 
-    try {
-      await axiosInstance.post('/invoices', { items: invoiceItems, totalAmount: billAmount });
-      
-      navigate('/generate-invoice', { 
-        state: { 
-          items: invoiceItems, 
-          totalItems, 
-          billAmount 
-        } 
-      });
-
-    } catch (err) {
-      console.error("Failed to create invoice:", err);
-      // ✨ REFINEMENT 3: Use the state for error messages instead of alert()
-      setError(err.response?.data?.error || "Error creating invoice.");
+    // Pass invoice data to the next route via state
+    navigate('/generate-invoice', { 
+      state: { 
+        items: invoiceItems, 
+        totalItems, 
+        billAmount 
+      } 
+    });
+  };
+  
+  const renderContent = () => {
+    if (loading) {
+      return <div className="status-message">Loading products...</div>;
     }
+    if (error) {
+      return <div className="status-message error">{error}</div>;
+    }
+    if (products.length === 0) {
+      return <div className="status-message">No products found. Add a product to get started!</div>;
+    }
+    return (
+      <div className="product-grid">
+        {products.map((product) => (
+          <ProductCard
+            key={product._id}
+            product={product}
+            quantity={cart[product._id] || 0}
+            isSelected={selectedProducts.has(product._id)}
+            onQuantityChange={handleQuantityChange}
+            onSelectionChange={handleSelectionChange}
+          />
+        ))}
+      </div>
+    );
   };
 
   return (
-    <div className="main-content">
-      <div className="header">
-        {/* ✨ REFINEMENT 4: Use the dynamic shop name */}
-        <div className="header-title"><strong>{userInfo?.username || 'My Shop'}</strong></div>
+    <div className="page-container">
+      <header className="app-header">
+        <h1 className="shop-name">{userInfo?.username || 'My Shop'}</h1>
         <div className="header-actions">
-          <button className="header-btn add-product-btn" onClick={() => navigate('/add-product')}>
-            Add Product
-          </button>
-          <button className="header-btn history-btn" onClick={() => navigate('/history')}>
-            History
-          </button>
+          <button className="header-btn secondary" onClick={() => navigate('/history')}>History</button>
+          <button className="header-btn primary" onClick={() => navigate('/add-product')}>Add Product</button>
         </div>
-      </div>
+      </header>
 
-      {error && <p className="cart-error-message">{error}</p>}
+      <main className="content-area">
+        {renderContent()}
+      </main>
 
-      {loading ? (
-        <p>Loading products...</p>
-      ) : (
-        <div className="product-grid">
-          {products.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              quantity={cart[product._id] || 0}
-              isSelected={selectedProducts.has(product._id)}
-              onQuantityChange={handleQuantityChange}
-              onSelectionChange={handleSelectionChange}
-            />
-          ))}
+      <footer className="summary-bar">
+        <div className="summary-details">
+          <span>Total Items: <strong>{totalItems}</strong></span>
+          <span>Bill Amount: <strong>₹{billAmount.toFixed(2)}</strong></span>
         </div>
-      )}
-
-      <div className="footer-bar">
-        <span>Total Items: {totalItems}</span>
-        <span>Bill Amount: ${billAmount.toFixed(2)}</span>
         <button 
           className="generate-invoice-btn" 
           onClick={handleGenerateInvoice}
@@ -178,9 +193,9 @@ function CartPage() {
         >
           Generate Invoice
         </button>
-      </div>
+      </footer>
     </div>
   );
-}
+};
 
-export default CartPage;
+export default CartPage;  

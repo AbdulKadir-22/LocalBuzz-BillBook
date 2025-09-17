@@ -1,188 +1,207 @@
-/* 🎨 Blue Theme for Registration Page */
+/* ==========================================================================
+   Auth Page Styles (Registration & Login)
+   ========================================================================== */
 
-/* ✨ Using the same variables from login.css for a consistent theme */
+/* ✨ Theme & Variables Foundation */
 :root {
-  --bg-color: #F0F4F8;
-  --card-bg-color: #FFFFFF;
-  --primary-blue: #1976D2;
-  --primary-blue-hover: #1565C0;
-  --text-dark: #212529;
-  --text-light: #6C757D;
-  --input-bg: #E3F2FD;
-  --input-border: #90CAF9;
-  --input-focus-border: #1976D2;
-  --error-color: #D32F2F;
-  --success-color: #2E7D32; /* Keeping success green as it's a standard UX pattern */
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --font-family: 'Segoe UI', 'Roboto', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --primary-color: #0052cc;
+  --primary-color-hover: #0041a3;
+  --text-primary: #172b4d;
+  --text-secondary: #6b778c;
+  --background-page: #f4f5f7;
+  --background-card: #ffffff;
+  --border-color: #dfe1e6;
+  --input-background: #fafbfc;
+  --success-color: #00875a;
+  --success-background: #e3fcef;
+  --error-color: #de350b;
+  --error-background: #ffebe6;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --border-radius-md: 8px;
+  --border-radius-sm: 4px;
 }
 
-body {
-  background-color: var(--bg-color);
-  margin: 0;
-  font-family: var(--font-family);
-  box-sizing: border-box;
-}
-
-.registration-container {
+/* Base layout for both login and registration pages */
+.auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  background-color: var(--background-page);
+  padding: 1rem;
+  font-family: var(--font-sans);
 }
 
-.registration-card {
+.auth-card {
   display: flex;
   width: 100%;
-  max-width: 1000px;
-  background-color: var(--card-bg-color);
-  border-radius: 20px;
+  max-width: 960px;
+  background-color: var(--background-card);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
-  box-shadow: 0 10px 30px var(--shadow-color);
 }
 
-/* Left Image Section */
-.registration-image-section {
+/* Left side visual section */
+.auth-visual-section {
   flex: 1;
-  display: block;
+  background-color: #000; /* Fallback */
 }
 
-.registration-image-section img {
+.auth-visual-section img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* Right Form Section */
-.registration-form-section {
+/* Right side form section */
+.auth-form-section {
   flex: 1;
-  padding: 50px;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.registration-form-section h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 10px;
+.auth-header {
+  margin-bottom: 1.5rem;
 }
 
-.sub-text {
-  font-size: 1rem;
-  color: var(--text-light);
-  margin-bottom: 20px;
-}
-
-.login-link {
-  font-size: 1rem;
-  color: var(--text-light);
-  margin-bottom: 20px;
-}
-
-.login-link a {
-  color: var(--primary-blue);
+.auth-header h2 {
+  font-size: 1.75rem;
   font-weight: 600;
-  text-decoration: none;
-  transition: color 0.2s ease;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
 }
 
-.login-link a:hover {
-  text-decoration: underline;
-  color: var(--primary-blue-hover);
+.auth-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
 }
 
-/* Inputs */
-.form-input-wrapper {
-  margin-bottom: 20px;
+/* Form inputs and labels */
+.input-group {
+  margin-bottom: 1.25rem;
 }
 
-.form-input-wrapper label {
+.input-group label {
   display: block;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
 }
 
-.form-input {
+.input-group input {
   width: 100%;
-  padding: 15px;
-  border-radius: 10px;
-  border: 2px solid var(--input-border);
-  background-color: var(--input-bg);
-  color: var(--text-dark);
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--input-background);
+  color: var(--text-primary);
   font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.form-input::placeholder {
-  color: var(--text-light);
-}
-
-.form-input:focus {
+.input-group input:focus {
   outline: none;
-  border-color: var(--input-focus-border);
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 82, 204, 0.2);
 }
 
-/* Button */
-.register-btn {
+.input-group input::placeholder {
+  color: #a5adba;
+}
+
+/* Main action button */
+.auth-button {
   width: 100%;
-  padding: 15px;
+  padding: 0.875rem;
   border: none;
-  border-radius: 10px;
-  background-color: var(--primary-blue);
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: bold;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s;
 }
 
-.register-btn:hover {
-  background-color: var(--primary-blue-hover);
-  transform: translateY(-2px);
+.auth-button:hover:not(:disabled) {
+  background-color: var(--primary-color-hover);
 }
 
-.register-btn:disabled {
-  background-color: #90CAF9;
+.auth-button:disabled {
+  background-color: #a5adba;
   cursor: not-allowed;
 }
 
-/* Messages */
-.message-container {
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+/* Link in the footer */
+.auth-footer {
+  margin-top: 1.5rem;
   text-align: center;
+  color: var(--text-secondary);
+}
+
+.auth-footer a {
+  color: var(--primary-color);
   font-weight: 500;
+  text-decoration: none;
 }
 
-.error-message {
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Error and success messages */
+.auth-message {
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.auth-message.error {
   color: var(--error-color);
-  background-color: rgba(211, 47, 47, 0.1);
+  background-color: var(--error-background);
 }
 
-.success-message {
+.auth-message.success {
   color: var(--success-color);
-  background-color: rgba(46, 125, 50, 0.1);
+  background-color: var(--success-background);
 }
 
-/* Responsive */
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
 @media (max-width: 900px) {
-  .registration-image-section {
+  .auth-visual-section {
     display: none;
   }
-  .registration-card {
+  
+  .auth-card {
     flex-direction: column;
-    width: 90%;
+    width: 100%;
     max-width: 450px;
   }
-  .registration-form-section {
-    padding: 30px;
+
+  .auth-form-section {
+    padding: 2.5rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .auth-form-section {
+    padding: 1.5rem;
+  }
+  
+  .auth-header h2 {
+    font-size: 1.5rem;
   }
 }

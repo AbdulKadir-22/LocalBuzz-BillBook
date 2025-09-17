@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Generate Invoice Page Styles
+   ========================================================================== */
+
+/* ✨ Reusing the same theme variables for consistency */
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --primary-color: #0052cc;
+  --primary-color-hover: #0041a3;
+  --text-primary: #172b4d;
+  --text-secondary: #6b778c;
+  --background-page: #f4f5f7;
+  --background-card: #ffffff;
+  --border-color: #dfe1e6;
+  --success-color: #00875a;
+  --success-background: #e3fcef;
+  --error-color: #de350b;
+  --error-background: #ffebe6;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --border-radius-md: 8px;
+  --border-radius-sm: 4px;
+}
+
+.invoice-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--background-page);
+    min-height: 100vh;
+    font-family: var(--font-sans);
+}
+
+.invoice-card {
+    width: 100%;
+    max-width: 800px;
+    background: var(--background-card);
+    padding: 3rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1.5rem;
+}
+
+.shop-details h1 { margin: 0; font-size: 2rem; color: var(--text-primary); }
+.shop-details p { margin: 5px 0 0; font-size: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.invoice-meta { text-align: right; color: var(--text-secondary); }
+.invoice-meta p { margin: 4px 0; font-size: 0.875rem; }
+.invoice-meta strong { color: var(--text-primary); }
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.invoice-table th, .invoice-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.invoice-table thead { background-color: #fafbfc; }
+.invoice-table th { font-weight: 600; color: var(--text-secondary); font-size: 0.875rem; text-transform: uppercase; }
+.invoice-table tbody tr:last-child td { border-bottom: none; }
+
+.invoice-table tfoot td { font-weight: 600; }
+.invoice-table tfoot .summary-label { color: var(--text-secondary); }
+.invoice-table tfoot .summary-value { color: var(--text-primary); }
+.invoice-table tfoot .grand-total-row { font-size: 1.25rem; }
+.invoice-table tfoot .grand-total-row td { border-top: 2px solid var(--text-primary); padding-top: 1rem; }
+.invoice-table tfoot .grand-total-row .summary-value { color: var(--primary-color); }
+
+.text-right { text-align: right !important; }
+
+.status-messages {
+    text-align: right;
+    margin-top: 1rem;
+    min-height: 24px;
+}
+.message { padding: 8px 12px; border-radius: var(--border-radius-sm); font-weight: 500; display: inline-block; font-size: 0.875rem; }
+.message.error { background-color: var(--error-background); color: var(--error-color); }
+.message.success { background-color: var(--success-background); color: var(--success-color); }
+
+/* Buttons below the invoice card */
+.invoice-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.action-btn {
+    padding: 0.6rem 1.25rem;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+.action-btn.primary { background-color: var(--primary-color); color: white; }
+.action-btn.primary:hover:not(:disabled) { background-color: var(--primary-color-hover); }
+.action-btn.secondary { background-color: #e9ecef; color: var(--text-primary); border: 1px solid var(--border-color); }
+.action-btn.secondary:hover:not(:disabled) { background-color: #dde1e6; }
+.action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.error-state {
+    text-align: center;
+    padding: 3rem;
+}
+.error-state p {
+    margin: 1rem 0;
+    color: var(--text-secondary);
+}
+
+/* --- Print Styles --- */
+@media print {
+    body { background-color: #fff; }
+    .invoice-page-container { padding: 0; }
+    .invoice-card { box-shadow: none; border: none; max-width: 100%; padding: 0; }
+    .invoice-actions { display: none; }
+    .status-messages { display: none; }
+}
