@@ -10,7 +10,10 @@ app.use(cors({
 }));
 
 const userAuthRoute = require('./routes/userAuth.route');
-
+const productRoutes = require('./routes/product.routes');
+const invoiceRoutes = require('./routes/invoice.routes');
+app.use('/api/invoices', invoiceRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/user',userAuthRoute);
 
 
