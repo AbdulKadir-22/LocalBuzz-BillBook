@@ -1,0 +1,188 @@
+/* 🎨 Blue Theme for Registration Page */
+
+/* ✨ Using the same variables from login.css for a consistent theme */
+:root {
+  --bg-color: #F0F4F8;
+  --card-bg-color: #FFFFFF;
+  --primary-blue: #1976D2;
+  --primary-blue-hover: #1565C0;
+  --text-dark: #212529;
+  --text-light: #6C757D;
+  --input-bg: #E3F2FD;
+  --input-border: #90CAF9;
+  --input-focus-border: #1976D2;
+  --error-color: #D32F2F;
+  --success-color: #2E7D32; /* Keeping success green as it's a standard UX pattern */
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  margin: 0;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.registration-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.registration-card {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  background-color: var(--card-bg-color);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+/* Left Image Section */
+.registration-image-section {
+  flex: 1;
+  display: block;
+}
+
+.registration-image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right Form Section */
+.registration-form-section {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.registration-form-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.sub-text {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.login-link {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.login-link a {
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+  color: var(--primary-blue-hover);
+}
+
+/* Inputs */
+.form-input-wrapper {
+  margin-bottom: 20px;
+}
+
+.form-input-wrapper label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-dark);
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--primary-blue);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.register-btn:hover {
+  background-color: var(--primary-blue-hover);
+  transform: translateY(-2px);
+}
+
+.register-btn:disabled {
+  background-color: #90CAF9;
+  cursor: not-allowed;
+}
+
+/* Messages */
+.message-container {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  color: var(--error-color);
+  background-color: rgba(211, 47, 47, 0.1);
+}
+
+.success-message {
+  color: var(--success-color);
+  background-color: rgba(46, 125, 50, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .registration-image-section {
+    display: none;
+  }
+  .registration-card {
+    flex-direction: column;
+    width: 90%;
+    max-width: 450px;
+  }
+  .registration-form-section {
+    padding: 30px;
+  }
+}

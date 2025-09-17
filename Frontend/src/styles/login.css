@@ -1,0 +1,200 @@
+/* 🎨 Blue Theme for Login Page - Matched to Registration */
+
+/* ✨ Using the same variables for a consistent theme */
+:root {
+  --bg-color: #F0F4F8;
+  --card-bg-color: #FFFFFF;
+  --primary-blue: #1976D2;
+  --primary-blue-hover: #1565C0;
+  --text-dark: #212529;
+  --text-light: #6C757D;
+  --input-bg: #E3F2FD;
+  --input-border: #90CAF9;
+  --input-focus-border: #1976D2;
+  --error-color: #D32F2F;
+  --success-color: #2E7D32;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  margin: 0;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-card {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  background-color: var(--card-bg-color);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+/* Left Image Section */
+.login-image-section {
+  flex: 1;
+  display: block;
+}
+
+.login-image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Right Form Section */
+.login-form-section {
+  flex: 1;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+/* ✨ NEW: Added .sub-text to match registration page */
+.sub-text {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.register-link { /* Renamed from .login-link for clarity */
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.register-link a {
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+  color: var(--primary-blue-hover);
+}
+
+/* Inputs */
+.form-input-wrapper {
+  margin-bottom: 20px;
+}
+
+.form-input-wrapper label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-dark);
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+}
+
+/* Link */
+.forgot-password-link {
+  text-align: right;
+  margin-top: -10px;
+  margin-bottom: 25px;
+}
+
+.forgot-password-link a {
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.forgot-password-link a:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--primary-blue);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-btn:hover {
+  background-color: var(--primary-blue-hover);
+  transform: translateY(-2px);
+}
+
+.login-btn:disabled {
+  background-color: #90CAF9;
+  cursor: not-allowed;
+}
+
+/* ✨ NEW: Updated message classes to match registration page */
+.message-container {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  color: var(--error-color);
+  background-color: rgba(211, 47, 47, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .login-image-section {
+    display: none;
+  }
+  .login-card {
+    flex-direction: column;
+    width: 90%;
+    max-width: 450px;
+  }
+  .login-form-section {
+    padding: 30px;
+  }
+}
