@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axios";
-import "../styles/registration.css"; // Ensure this path points to the new CSS below
+import "../styles/registration.css"; // Ensure this path is correct
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -32,8 +32,11 @@ const Registration = () => {
     setLoading(true);
 
     try {
-      const res = await axiosInstance.post("/users/signup", formData);
+      // ✨ FIX: Using the correct API endpoint to match the backend route
+      const res = await axiosInstance.post("/user/signup", formData);
       setSuccess(res.data.message || "Account created successfully!");
+      
+      // Redirect to login page after a short delay
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed. Please try again.");
@@ -47,7 +50,6 @@ const Registration = () => {
       <div className="registration-card">
         {/* Left Image Section */}
         <div className="registration-image-section">
-          {/* ✨ NEW: Swapped image to match the theme */}
           <img
             src="https://i.pinimg.com/736x/c4/a3/1e/c4a31e950b3dc16250f7c56519515e80.jpg"
             alt="Modern storefront"
@@ -63,13 +65,11 @@ const Registration = () => {
             Already have an account? <NavLink to="/login">Log In</NavLink>
           </div>
           
-          {/* ✨ NEW: Moved messages outside the form for better structure */}
           {error && <p className="message-container error-message">{error}</p>}
           {success && <p className="message-container success-message">{success}</p>}
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="form-input-wrapper">
-              {/* ✨ NEW: Added label for accessibility */}
               <label htmlFor="shopName">Shop Name</label>
               <input
                 type="text"
@@ -111,12 +111,7 @@ const Registration = () => {
               />
             </div>
 
-            <button
-              type="submit"
-              // ✨ NEW: Updated class name for consistency
-              className="register-btn"
-              disabled={loading}
-            >
+            <button type="submit" className="register-btn" disabled={loading}>
               {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
