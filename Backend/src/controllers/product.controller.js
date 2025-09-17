@@ -3,7 +3,8 @@ const productService = require('../services/product.service');
 // Controller to handle product creation
 const addProduct = async (req, res) => {
     try {
-        // req.user._id comes from the requireAuth middleware
+        // req.user._id comes from the requireAuth middleware.
+        // req.body contains all form data (name, price, quantity, imageUrl).
         const product = await productService.createProduct(req.body, req.user._id);
         res.status(201).json(product);
     } catch (error) {
@@ -28,7 +29,6 @@ const updateExistingProduct = async (req, res) => {
         const product = await productService.updateProduct(id, req.body, req.user._id);
         res.status(200).json(product);
     } catch (error) {
-        // Handle specific "not found" errors
         if (error.message.includes('not found')) {
             return res.status(404).json({ error: error.message });
         }

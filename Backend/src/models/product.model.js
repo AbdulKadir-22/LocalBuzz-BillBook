@@ -22,6 +22,12 @@ const productSchema = new Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    // ✨ ADDED: Field to store the image URL
+    imageUrl: {
+        type: String,
+        trim: true,
+        default: ''
     }
 }, {
     timestamps: true // Automatically adds createdAt and updatedAt fields

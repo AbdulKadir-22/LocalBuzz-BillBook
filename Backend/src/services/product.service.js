@@ -1,12 +1,11 @@
-const Product = require('../models/product.model'); // Adjust the path if necessary
+const Product = require('../models/product.model');
 
 // Service to create a new product
 const createProduct = async (productData, userId) => {
-    const { name, price, quantity } = productData;
+    // ✨ FIX: Use the spread syntax (...) to accept all fields from the form.
+    // This is more flexible and automatically includes imageUrl.
     const product = new Product({
-        name,
-        price,
-        quantity,
+        ...productData,
         user: userId, // Link the product to the logged-in user
     });
     return await product.save();
@@ -18,7 +17,7 @@ const getProductsByUser = async (userId) => {
     return await Product.find({ user: userId }).sort({ createdAt: -1 });
 };
 
-// Service to update a product
+// Service to update a product (No changes needed, it's already flexible)
 const updateProduct = async (productId, updateData, userId) => {
     const product = await Product.findOne({ _id: productId, user: userId });
 
