@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-    // Establishes a relationship between the product and the user (shopkeeper)
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'User' // This tells Mongoose the ObjectId refers to a document in the 'User' collection
+        ref: 'User'
     },
     name: {
         type: String,
@@ -23,14 +22,14 @@ const productSchema = new Schema({
         required: true,
         default: 0
     },
-    // ✨ ADDED: Field to store the image URL
+
     imageUrl: {
         type: String,
         trim: true,
         default: ''
     }
 }, {
-    timestamps: true // Automatically adds createdAt and updatedAt fields
+    timestamps: true
 });
 
 module.exports = mongoose.model('Product', productSchema);

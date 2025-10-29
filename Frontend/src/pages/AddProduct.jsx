@@ -8,19 +8,25 @@ import "../styles/AddProduct.css";
  */
 const AddProduct = () => {
   const navigate = useNavigate();
+
+  // --> 1. Updated state
+  // We removed 'imageUrl' since we are now uploading a file.
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     quantity: "",
-    imageUrl: "",
   });
+  // We add new state to hold the actual file object.
+  const [imageFile, setImageFile] = useState(null);
+  // We add state to show a local preview of the selected image.
+  const [previewSource, setPreviewSource] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   /**
-   * Updates form data state on user input.
+   * Updates form data state for TEXT inputs.
    * @param {React.ChangeEvent<HTMLInputElement>} e - The input change event.
    */
   const handleChange = (e) => {
@@ -29,6 +35,28 @@ const AddProduct = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  // --> 2. New handler for FILE input
+  /**
+   * Updates the file state and sets a preview.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event.
+   */
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file); // Store the file object
+
+      // Create a local URL for preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewSource(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImageFile(null);
+      setPreviewSource("");
+    }
   };
 
   /**
@@ -41,16 +69,28 @@ const AddProduct = () => {
     setError("");
     setSuccess("");
 
-    if (!formData.name || !formData.price || !formData.quantity) {
-      setError("Please fill in all required fields.");
+    // --> 3. Updated validation
+    if (!formData.name || !formData.price || !formData.quantity || !imageFile) {
+      setError("Please fill in all fields and upload an image.");
       setLoading(false);
       return;
     }
 
+    // --> 4. Use FormData to send the file
+    // We must use FormData to send files (multipart/form-data)
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("price", formData.price);
+    data.append("quantity", formData.quantity);
+    data.append("image", imageFile); // 'image' MUST match the backend middleware name
+
     try {
-      await axiosInstance.post("/products", formData);
+      // --> 5. Send the FormData object
+      // 'axiosInstance' will automatically set the 'Content-Type'
+      // to 'multipart/form-data' when you pass it a FormData object.
+      await axiosInstance.post("/products", data);
       setSuccess("Product added successfully! Redirecting...");
-      
+
       setTimeout(() => {
         navigate("/cart"); // Navigate back to the main product list
       }, 2000);
@@ -66,6 +106,7 @@ const AddProduct = () => {
   return (
     <div className="form-page-container">
       <form className="form-card" onSubmit={handleSubmit} noValidate>
+        {/* ... (Header and error/success messages are the same) ... */}
         <div className="form-header">
           <h2>Add New Product</h2>
           <button type="button" className="secondary-btn" onClick={() => navigate("/cart")}>
@@ -76,6 +117,7 @@ const AddProduct = () => {
         {error && <div className="form-message error">{error}</div>}
         {success && <div className="form-message success">{success}</div>}
 
+        {/* ... (Name, Price, Quantity inputs are the same) ... */}
         <div className="form-group">
           <label htmlFor="name">Product Name</label>
           <input
@@ -100,7 +142,7 @@ const AddProduct = () => {
               value={formData.price}
               onChange={handleChange}
               step="0.01"
-              min="0"
+              g min="0"
               required
             />
           </div>
@@ -115,31 +157,31 @@ const AddProduct = () => {
               onChange={handleChange}
               min="0"
               required
-            />
+              _ />
           </div>
         </div>
 
+        {/* --> 6. Replaced text input with file input */}
         <div className="form-group">
-          <label htmlFor="imageUrl">Image URL (Optional)</label>
+          <label htmlFor="image">Product Image</label>
           <input
-            type="text"
-            id="imageUrl"
-            name="imageUrl"
-            placeholder="https://example.com/image.jpg"
-            value={formData.imageUrl}
-            onChange={handleChange}
+            type="file"
+            id="image"
+            name="image"
+            accept="image/png, image/jpeg, image/jpg, image/webp" // Good practice
+            onChange={handleFileChange} // Use the new file handler
+            required
           />
         </div>
 
-        {formData.imageUrl && (
+        {/* --> 7. Updated preview logic */}
+        {previewSource && (
           <div className="form-group">
             <label>Image Preview</label>
-            <img 
-              src={formData.imageUrl} 
-              alt="Product Preview" 
+            <img
+              src={previewSource} // Show the local preview
+              alt="Product Preview"
               className="image-preview"
-              onError={(e) => e.target.style.display = 'none'} // Hide if image URL is broken
-              onLoad={(e) => e.target.style.display = 'block'} // Show if image loads
             />
           </div>
         )}
